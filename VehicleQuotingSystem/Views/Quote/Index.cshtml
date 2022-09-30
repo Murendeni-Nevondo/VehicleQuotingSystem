@@ -1,0 +1,63 @@
+﻿@model VehicleQuotingSystem.ViewModels.SearchQuoteViewModel
+
+@{
+    ViewData["Title"] = "Quotes";
+}
+
+<h3>Find Quotes</h3>
+
+<form asp-action="QuoteSearch">
+    <div class="row">
+    
+        <div class="col-3">
+            <input class="form-control" type="text" placeholder="Car Make" aria-label="default input example" asp-for="CarMake">
+        </div>
+
+        <div class="col-3">
+            <input class="form-control" type="text" placeholder="Car Model" aria-label="default input example" asp-for="CarModel">
+        </div>
+
+        <div class="col-3">
+            <input class="form-control" type="text" placeholder="Year" aria-label="default input example" asp-for="Year">
+        </div>
+
+    </div>
+
+    <p style="float : right;" class="mt-3">
+        <button type="submit" class="btn btn-secondary">Search</button>
+    </p>
+</form>
+
+@{
+    if(Model.Quotes.Count == 0)
+    {
+        <h5 class="text-center mt-5 text-danger">Enter creteria and click "Search"</h5>
+    }
+    else
+    {
+        <div>
+            <table class="table">
+                <thead>
+                    <tr>
+                      <th scope="col">Quote Ref</th>
+                      <th scope="col">Date Created</th>
+                      <th scope="col">Policy Holder</th>
+                      <th scope="col"></th>
+                    </tr>
+                  </thead>
+                <tbody>
+                    @foreach(var quote in Model.Quotes)
+                    {
+                        <tr>
+                            <td>@quote.QuoteRef</td>
+                            <td>@quote.DateCreated.ToShortDateString()</td>
+                            <td>@quote.PolicyHolder</td>
+                            <td><a href="/Quote/ViewQuote/@quote.QuoteId">View</a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+}
+

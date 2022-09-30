@@ -1,0 +1,80 @@
+﻿@model VehicleQuotingSystem.ViewModels.PolicyHolderViewModel
+
+@{
+    ViewData["Title"] = "Policy Holder Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h4>Policy Holder Details</h4>
+
+<nav class="mt-3">
+  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+    <button class="nav-link active" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Quotes</button>
+    <button class="nav-link" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Basic Details</button>
+  </div>
+</nav>
+<div class="tab-content" id="nav-tabContent">
+  <div class="tab-pane fade" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
+      <div class="mb-3">
+            <label for="first-name" class="col-form-label">First Name</label>
+        <input type="text" class="form-control" id="first-name" value="@Model.FirstName" readonly>
+      </div>
+
+    <div class="mb-3">
+        <label for="last-name" class="col-form-label" value="@Model.LastName">Last Name</label>
+        <input type="text" class="form-control" id="last-name" value="@Model.LastName" readonly>
+    </div>
+
+    <div class="mb-3">
+        <label for="email" class="col-form-label">Email</label>
+        <input type="email" class="form-control" id="email" value="@Model.Email" readonly>
+    </div>
+
+    <div class="mb-3">
+        <label for="date-of-birth" class="col-form-label">Date Of Birth</label>
+        <input type="text" class="form-control" id="date-of-birth" value="@Model.DateOfBirth.ToShortDateString()" readonly>
+    </div>
+  </div>
+
+  @*QUOTES*@
+  <div class="tab-pane fade show active" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
+        @{
+            if(Model.Quotes.Count == 0)
+            {
+                <h5 class="text-center mt-5 text-danger">This client has no quotes</h5>
+            }
+            else
+            {
+                <div>
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th scope="col">QuoteRef</th>
+                          <th scope="col">Date Created</th>
+                          <th scope="col"></th>
+                        </tr>
+                      </thead>
+                        <tbody>
+                            @foreach(var quote in Model.Quotes)
+                            {
+                                <tr>
+                                  <td>@quote.QuoteRef</td>
+                                  <td>@quote.DateCreated.ToShortDateString()</td>
+                                  <td><a href="/Quote/ViewQuote/@quote.QuoteId">View</a></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        }
+  </div>
+</div>
+
+<div class="mt-2" style="float:right;">
+    <form method="post" asp-action="NewQuote" asp-controller="Quote">
+        <input type="hidden" asp-for="PolicyHolderId" value="@Model.PolicyHolderId" />
+         <button type="submit" class="btn btn-primary">New Quote</button>
+    </form>
+</div>
+

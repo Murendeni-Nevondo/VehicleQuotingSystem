@@ -1,0 +1,114 @@
+﻿@model VehicleQuotingSystem.ViewModels.QuoteViewModel
+
+@{
+    ViewData["Title"] = "ViewQuote";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Quote Summary</h1>
+
+<h6>Pollicy Holder</h6>
+<hr />
+<p>First Name: @Model.PolicyHolder.FirstName</p>
+<p>Last Name: @Model.PolicyHolder.LastName</p>
+<p>Date Of Birth: @Model?.PolicyHolder.DateOfBirth</p>
+<hr />
+
+<div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Quote Ref</th>
+          <th scope="col">Make</th>
+          <th scope="col">Model</th>
+          <th scope="col">Sum Insured</th>
+          <th scope="col">Rate</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+            @{
+                foreach(var item in Model.VehicleQuotes)
+                {
+                    if(item.Vehicle != null)
+                    {
+                        <tr>
+                          <td>@item.Quote.QuoteRef</td>
+                          <td>@item.Vehicle.Make</td>
+                          <td>@item.Vehicle.Model</td>
+                          <td>@item.SumInsured</td>
+                          <td>@item.Rate</td>
+                        </tr>
+                    }
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<div style="float:right;">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addVehicleModal" data-bs-whatever="getbootstrap">Add Vehicles</button>
+</div>
+
+
+@*TODO : Extract to partial view*@
+<div class="modal fade" id="addVehicleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add New Vehicle</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+        <form method="post" asp-action="AddVehicleToQuote">
+          <div class="modal-body">
+              <div class="mb-3">
+                  <select class="form-select" aria-label="Default Select Vehicle" id="vehicle-list">
+                      <option selected>Select Vehicle</option>
+                      @foreach(var vehicle in Model.Vehicles)
+                      {
+                           var fullName = vehicle.Make + " " + vehicle.Model + " " + vehicle.Year.ToString();
+                           <option value="@vehicle.VehicleId">@fullName</option>       
+                       }
+                  </select>
+              </div>
+
+              <div class="mb-3">
+                <label for="first-name" class="col-form-label">Make</label>
+                <input type="text" class="form-control" id="make" required>
+              </div>
+
+              <div class="mb-3">
+                <label for="last-name" class="col-form-label">Model</label>
+                <input type="text" class="form-control" id="model" required>
+              </div>
+
+
+              <div class="mb-3">
+                <label for="date-of-birth" class="col-form-label">Year</label>
+                <input type="number" class="form-control" id="year" required>
+              </div>
+          
+              <div class="mb-3">
+                <label for="sum-insured" class="col-form-label">Sum Insured</label>
+                <input type="number" class="form-control" id="sum-insured" required asp-for="SumInsured">
+              </div>
+
+               <div class="mb-3">
+                <label for="date-of-birth" class="col-form-label">Rate</label>
+                <input type="number" class="form-control" id="rate" readonly asp-for="Rate" required>
+              </div>
+
+              <input type="hidden" value="@Model.QuoteId" class="form-control" id="quote-id" asp-for="QuoteId">
+               <input type="hidden" class="form-control" id="vehicles" asp-for="VehicleIds">
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
+        </form>
+    </div>
+  </div>
+</div>
+
+

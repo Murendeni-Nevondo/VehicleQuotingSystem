@@ -1,0 +1,81 @@
+﻿@model VehicleQuotingSystem.ViewModels.PolicyHolderViewModel
+
+@{
+    ViewData["Title"] = "Policy Holders";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h4>Policy Holders</h4>
+
+<div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Client Code</th>
+          <th scope="col">First Name</th>
+          <th scope="col">Last Name</th>
+          <th scope="col">Email</th>
+          <th scope="col">Date Of Birth</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+            @foreach(var policyHolder in Model.policyHolders)
+            {
+                <tr>
+                  <td>@policyHolder.ClientCode</td>
+                  <td>@policyHolder.FirstName</td>
+                  <td>@policyHolder.LastName</td>
+                  <td>@policyHolder.Email</td>
+                  <td>@policyHolder.Email</td>
+                  <td><a href="PolicyHolder/Details/@policyHolder.PolicyHolderId">View</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="text-right">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPolicyHolderModal" data-bs-whatever="getbootstrap">Add New Policy Holder</button>
+</div>
+
+<div class="modal fade" id="addPolicyHolderModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add New Policy Holder</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+        <form method="post" asp-action="AddPolicyHolder">
+          <div class="modal-body">
+
+              <div class="mb-3">
+                <label for="first-name" class="col-form-label">First Name</label>
+                <input type="text" class="form-control" id="first-name" asp-for="FirstName" required>
+              </div>
+
+              <div class="mb-3">
+                <label for="last-name" class="col-form-label">Last Name</label>
+                <input type="text" class="form-control" id="last-name" asp-for="LastName" required>
+              </div>
+
+              <div class="mb-3">
+                <label for="email" class="col-form-label">Email</label>
+                <input type="email" class="form-control" id="email" asp-for="Email" required>
+              </div>
+
+              <div class="mb-3">
+                <label for="date-of-birth" class="col-form-label">Email</label>
+                <input type="date" class="form-control" id="date-of-birth" asp-for="DateOfBirth" required>
+              </div>
+          
+               <input type="hidden" class="form-control" id="client-code" asp-for="ClientCode">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
+        </form>
+    </div>
+  </div>
+</div>
